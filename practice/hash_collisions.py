@@ -16,6 +16,22 @@ class HashTable:
         # Return the length of the list to hold the hash table data. Not the numer of items stored in the hash table, but the number of slots in the main list. One of the tests relies on this.
         return len(self.storage)
     
+    def get_load_factor(self):
+        return self.item_count / self.capacity
+    def resize(self, new_capacity):
+        old_storage = self.storage
+        self.capacity = new_capacity
+        self.storage = [None] * self.capacity
+
+        current_entry = None
+
+        old_item_count = self.item_count
+        for bucket_item in old_storage:
+            current_entry = bucket_item
+            while current_entry is not None:
+                self.put(current_entry.key, current_entry.value)
+                current_entry = current_entry.next
+            self.item_count = old_item_count 
     def djb2(self, key):
         # cast the key to a string and get bytes
         str_key = str(key).encode()
@@ -48,6 +64,12 @@ class HashTable:
             new_entry = HashTableEntry(key, value)
             new_entry.next = self.storage[index]
             self.storage[index] = new_entry
+        
+        self.item_count += 1
+
+        if self.get_load_factor() > 0.7:
+            self.resize(self.capacity * 2)
+            
         return 
 
     def delete(self, key):

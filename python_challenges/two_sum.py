@@ -19,3 +19,12 @@ def twoSum( nums, target):
             return indexSums
 
 print(twoSum([3, 3], 6))
+
+# def hash_func(input_str, tbl_size):
+#     string = input_str.encode()
+#     sum = 0
+#     for s in string:
+#         sum += s
+#     return sum 
+
+# print(hash_func("saeed", 10))
